@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11161d">
+<title>Race Day · Training and Nutrition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f5f7;--card:#fff;--card2:#e9edf1;--line:#d3dae1;--tx:#141b23;--tx2:#5d6b79;--tx3:#8794a1;--acc:#0d7d9e;--acc-t:#fff;--food:#a8651a;--win:#2b7f59;--warn:#b8463a;--shadow:0 1px 2px rgba(20,27,35,.07)}
+@media (prefers-color-scheme:dark){:root{--bg:#11161d;--card:#1a222c;--card2:#232e3a;--line:#31404f;--tx:#e9eef3;--tx2:#93a3b2;--tx3:#6f8090;--acc:#49b8d8;--acc-t:#0e151c;--food:#e0a54a;--win:#5fbf8a;--warn:#e5705f;--shadow:none}}
+html[data-theme="light"]{--bg:#f3f5f7;--card:#fff;--card2:#e9edf1;--line:#d3dae1;--tx:#141b23;--tx2:#5d6b79;--tx3:#8794a1;--acc:#0d7d9e;--acc-t:#fff;--food:#a8651a;--win:#2b7f59;--warn:#b8463a;--shadow:0 1px 2px rgba(20,27,35,.07)}
+html[data-theme="dark"]{--bg:#11161d;--card:#1a222c;--card2:#232e3a;--line:#31404f;--tx:#e9eef3;--tx2:#93a3b2;--tx3:#6f8090;--acc:#49b8d8;--acc-t:#0e151c;--food:#e0a54a;--win:#5fbf8a;--warn:#e5705f;--shadow:none}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:Archivo,system-ui,sans-serif;font-size:16px;line-height:1.45;padding-bottom:96px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.wrap{max-width:840px;margin:0 auto;padding:0 clamp(14px,3.5vw,24px)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:3px}
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.hrow{display:flex;align-items:center;gap:14px;padding:12px 0}
+.cd b{font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;letter-spacing:-.02em;display:block;line-height:1}
+.cd i{font-style:normal;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--tx3);display:block;margin-top:3px}
+.hmid{flex:1 1 auto;min-width:0}
+.hmid .p{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);font-weight:600}
+.hmid .d{font-size:17px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ic{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;font-size:15px;flex:0 0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);z-index:40;padding-bottom:env(safe-area-inset-bottom)}
+.tabs{max-width:840px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{padding:11px 2px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--tx3);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border-top:2px solid transparent;margin-top:-1px}
+.tab .g{font-size:16px;line-height:1}
+.tab[aria-selected="true"]{color:var(--acc);border-top-color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+.card.flag{border-color:var(--warn)}
+.chd{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.chd h2{font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;flex:1 1 auto}
+.chd .r{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx2);font-weight:600}
+.pad{padding:15px}
+.sect{margin:26px 0 10px;display:flex;align-items:baseline;gap:10px}
+.sect h2{font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+.sect span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);margin-left:auto}
+.hint{font-size:13px;color:var(--tx2);line-height:1.55}
+.hint b{color:var(--tx)}
+.pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border-radius:3px;background:var(--card2);color:var(--tx2)}
+.pill.acc{background:var(--acc);color:var(--acc-t)}
+.pill.warn{background:var(--warn);color:#fff}
+.pill.win{background:var(--win);color:#fff}
+.row{display:flex;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);align-items:flex-start;width:100%;text-align:left}
+.row:last-child{border-bottom:0}
+.row.on{background:var(--card2)}
+.box{width:26px;height:26px;flex:0 0 auto;border:2px solid var(--line);border-radius:6px;display:grid;place-items:center;margin-top:1px}
+.row.on .box{background:var(--win);border-color:var(--win)}
+.box svg{width:14px;height:14px;stroke:#fff;stroke-width:3.4;fill:none;opacity:0}
+.row.on .box svg{opacity:1}
+.rbody{flex:1 1 auto;min-width:0}
+.rt{font-size:15px;font-weight:600;line-height:1.3;display:block}
+.row.on .rt{color:var(--tx2)}
+.rx{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--acc);font-weight:600;margin-top:3px;display:block}
+.rn{font-size:12.5px;color:var(--tx2);margin-top:4px;line-height:1.45;display:block}
+.mac{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.mac div{background:var(--card);padding:11px 6px;text-align:center}
+.mac b{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;display:block}
+.mac i{font-style:normal;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);display:block;margin-top:2px}
+.bar{height:6px;background:var(--card2);border-radius:3px;overflow:hidden;margin-top:9px}
+.bar>i{display:block;height:100%;background:var(--acc);width:0}
+.bar.f>i{background:var(--food)} .bar.g>i{background:var(--win)} .bar.w>i{background:var(--warn)}
+.wkhd{display:flex;align-items:center;gap:10px;width:100%;padding:12px 15px;text-align:left}
+.wkno{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--tx3)}
+.wkdt{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;flex:1 1 auto}
+.mini{display:flex;gap:3px}
+.mini i{width:9px;height:9px;border-radius:2px;background:var(--card2);display:block}
+.mini i.t{background:var(--acc);opacity:.3} .mini i.t.done{opacity:1} .mini i.r{background:var(--line)}
+.chev{color:var(--tx3);font-size:11px}
+.wkhd[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.dayrow{display:flex;gap:11px;align-items:center;padding:10px 15px;border-top:1px solid var(--line);width:100%;text-align:left}
+.dd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);width:56px;flex:0 0 auto}
+.dl{flex:1 1 auto;font-size:14px;font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dl.rest{font-weight:400;color:var(--tx2)}
+.dk{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--tx3)}
+.fi{padding:13px 15px;border-bottom:1px solid var(--line)}
+.fi:last-child{border-bottom:0}
+.fi-hd{display:flex;gap:10px;align-items:baseline}
+.fi-hd b{font-size:14.5px;font-weight:600;flex:1 1 auto}
+.fi-hd span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);white-space:nowrap}
+.fi-b{font-size:13px;color:var(--tx2);margin-top:5px;line-height:1.5}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.stat div{background:var(--card);padding:15px 8px;text-align:center}
+.stat b{font-family:'IBM Plex Mono',monospace;font-size:25px;font-weight:600;display:block;line-height:1}
+.stat i{font-style:normal;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);display:block;margin-top:6px}
+.phrow{padding:13px 15px;border-bottom:1px solid var(--line)}
+.phrow:last-child{border-bottom:0}
+.phrow .t{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;font-weight:600;gap:10px}
+.phrow .t span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);font-weight:400;white-space:nowrap}
+.inp{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--line)}
+.inp label{flex:1 1 auto;font-size:14px;font-weight:500}
+.inp label small{display:block;font-size:11.5px;color:var(--tx3);font-weight:400;margin-top:2px}
+.inp input{width:88px;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;text-align:right}
+.ref{padding:13px 15px;border-bottom:1px solid var(--line)}
+.ref:last-child{border-bottom:0}
+.ref b{font-size:14px;font-weight:600;display:block}
+.ref cite{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--tx3);font-style:normal;display:block;margin-top:3px}
+.ref p{font-size:13px;color:var(--tx2);margin-top:6px;line-height:1.55}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap hrow">
+  <div class="cd"><b id="cdN">--</b><i>days out</i></div>
+  <div class="hmid"><div class="p" id="hPhase">Phase</div><div class="d" id="hDate">Today</div></div>
+  <button class="ic" id="themeBtn" aria-label="Switch light and dark">◐</button>
+</div></header>
+<div class="wrap"><main id="view"></main></div>
+<nav><div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-v="today" aria-selected="true"><span class="g">◉</span>Today</button>
+  <button class="tab" role="tab" data-v="plan" aria-selected="false"><span class="g">▤</span>Plan</button>
+  <button class="tab" role="tab" data-v="food" aria-selected="false"><span class="g">◍</span>Food</button>
+  <button class="tab" role="tab" data-v="prog" aria-selected="false"><span class="g">◈</span>Progress</button>
+  <button class="tab" role="tab" data-v="why" aria-selected="false"><span class="g">§</span>Why</button>
+</div></nav>
+<script>
+/* ==========================================================================
+   DATA BLOCK. Everything editable lives above END DATA BLOCK.
+   ========================================================================== */
+var CFG={
+  raceISO:"2026-12-09T12:40:00-06:00", startISO:"2026-07-29",
+  age:37, sex:"female",
+  goalBodyFatPct:16,       // target composition, not a target weight
+  deficitEndWeek:13,        // hard stop. Deficit may finish earlier once goal is hit.
+  garthePctCap:1.0,         // above roughly this, Garthe saw no lean mass gain
+  eaFloor:30,               // kcal per kg fat-free mass. Clinical LEA threshold.
+  supabaseUrl:"", supabaseKey:""
+};
+/* Defaults until you enter your own in the Progress tab. Clearly flagged
+   in the interface as placeholders, not measurements. */
+/* From your InBody 5/20/26: 137.2 lb, 28.5 lb fat mass, 20.7% bf, 60.8 lb SMM.
+   Nudged to a 140 / 22% estimate since you said it has gone up. Replace after
+   tomorrow's scan and every number in the app recalculates. */
+var ME={weightLb:140, heightIn:66, bodyFatPct:22, smmLb:60.8, activity:1.45, goalWeeks:8, fourth:false, set:false};
+/* Body composition history. Each InBody gets logged here so you can see
+   fat mass and skeletal muscle moving in opposite directions, which is the
+   only thing that tells you a recomp is actually happening. */
+var SCANS=[{d:"2026-05-20",w:137.2,bf:20.7,smm:60.8}];
+var PHASES=[
+ {k:"base", n:"Base",      w:[1,6],   note:"Run base from zero, general strength, grip. Deficit runs here."},
+ {k:"build",n:"Build",     w:[7,13],  note:"Compromised running, station skill, sled load. The deficit ends inside this block once you hit goal."},
+ {k:"spec", n:"Specific",  w:[14,17], note:"Race simulation. Maintenance calories. Long days get fed properly."},
+ {k:"taper",n:"Taper",     w:[18,19], note:"Volume down, food at maintenance."},
+ {k:"race", n:"Race week", w:[20,20], note:"Carb forward. Wave is Wednesday 12:40."}
+];
+/* Estimated exercise energy cost per session type, used for energy availability. */
+var EEE={rest:60, lift:230, run:260, run2:250, sat:300, satLong:600, race:1100};
+var LIFT={
+ 1:{sq:"105 lb",sqs:"3 x 8",rd:"95 lb",rds:"3 x 8",pr:"20 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 2:{sq:"105 lb",sqs:"3 x 8",rd:"95 lb",rds:"3 x 8",pr:"20 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 3:{sq:"110 lb",sqs:"3 x 8",rd:"100 lb",rds:"3 x 8",pr:"22.5 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 4:{sq:"110 lb",sqs:"3 x 8",rd:"100 lb",rds:"3 x 8",pr:"22.5 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 5:{sq:"115 lb",sqs:"3 x 8",rd:"105 lb",rds:"3 x 8",pr:"25 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 6:{sq:"115 lb",sqs:"3 x 8",rd:"105 lb",rds:"3 x 8",pr:"25 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 7:{sq:"125 lb",sqs:"4 x 6",rd:"115 lb",rds:"3 x 6",pr:"25 lb DB",prs:"3 x 6",rest:"2 min"},
+ 8:{sq:"125 lb",sqs:"4 x 6",rd:"115 lb",rds:"3 x 6",pr:"25 lb DB",prs:"3 x 6",rest:"2 min"},
+ 9:{sq:"130 lb",sqs:"4 x 6",rd:"120 lb",rds:"3 x 6",pr:"27.5 lb DB",prs:"3 x 6",rest:"2 min"},
+ 10:{sq:"130 lb",sqs:"4 x 6",rd:"120 lb",rds:"3 x 6",pr:"27.5 lb DB",prs:"3 x 6",rest:"2 min"},
+ 11:{sq:"135 lb",sqs:"4 x 5",rd:"125 lb",rds:"3 x 5",pr:"30 lb DB",prs:"3 x 6",rest:"2 min"},
+ 12:{sq:"135 lb",sqs:"4 x 5",rd:"125 lb",rds:"3 x 5",pr:"30 lb DB",prs:"3 x 6",rest:"2 min"},
+ 13:{sq:"140 lb",sqs:"3 x 5",rd:"130 lb",rds:"3 x 5",pr:"30 lb DB",prs:"3 x 6",rest:"2 min"},
+ 14:{sq:"130 lb",sqs:"3 x 5",rd:"120 lb",rds:"2 x 5",pr:"27.5 lb DB",prs:"2 x 6",rest:"2 min"},
+ 15:{sq:"130 lb",sqs:"3 x 5",rd:"120 lb",rds:"2 x 5",pr:"27.5 lb DB",prs:"2 x 6",rest:"2 min"},
+ 16:{sq:"130 lb",sqs:"3 x 5",rd:"120 lb",rds:"2 x 5",pr:"27.5 lb DB",prs:"2 x 6",rest:"2 min"},
+ 17:{sq:"115 lb",sqs:"2 x 5",rd:"105 lb",rds:"2 x 5",pr:"25 lb DB",prs:"2 x 6",rest:"2 min"},
+ 18:{sq:"115 lb",sqs:"2 x 6",rd:"105 lb",rds:"2 x 6",pr:"25 lb DB",prs:"2 x 8",rest:"90 sec"},
+ 19:{sq:"95 lb",sqs:"1 x 6",rd:"95 lb",rds:"1 x 6",pr:"20 lb DB",prs:"1 x 8",rest:"90 sec"},
+ 20:{sq:"none",sqs:"",rd:"none",rds:"",pr:"none",prs:"",rest:""}
+};
+var RUN={
+ 1:"8 x (1 min jog / 90 sec walk). Walk 5 min either side.",
+ 2:"8 x (90 sec jog / 90 sec walk).",
+ 3:"7 x (2 min jog / 1 min walk).",
+ 4:"6 x (3 min jog / 1 min walk).",
+ 5:"4 x (5 min jog / 90 sec walk).",
+ 6:"2 x (10 min jog / 2 min walk).",
+ 7:"2 x (12 min jog / 2 min walk).",
+ 8:"20 min continuous. No walk breaks from here.",
+ 9:"22 min continuous.", 10:"25 min continuous.", 11:"3 km continuous.",
+ 12:"4 km continuous.", 13:"5 km continuous.",
+ 14:"5 km easy at shared race pace with Justine.",
+ 15:"4 x 1 km at race pace, 2 min walk between.",
+ 16:"5 km easy at shared pace.", 17:"4 km easy.", 18:"4 km easy.",
+ 19:"3 km with 4 x 20 sec strides.", 20:"20 min easy with 3 x 20 sec strides."
+};
+/* Optional fourth session. A second easy run is the highest value addition
+   for this race, because 8 km of running is the part you cannot split with
+   Justine. Toggle it in Progress. The app feeds it automatically. */
+var RUN2={
+ 1:"10 min easy walk with 4 x 1 min jog.", 2:"12 min easy walk with 5 x 1 min jog.",
+ 3:"6 x (2 min jog / 1 min walk).", 4:"5 x (3 min jog / 90 sec walk).",
+ 5:"15 min very easy continuous jog.", 6:"18 min very easy continuous jog.",
+ 7:"20 min easy.", 8:"20 min easy.", 9:"22 min easy.", 10:"25 min easy.",
+ 11:"25 min easy.", 12:"3 km very easy.", 13:"3 km very easy.",
+ 14:"3 km recovery pace.", 15:"3 km recovery pace.", 16:"3 km recovery pace.",
+ 17:"2.5 km recovery pace.", 18:"2.5 km recovery pace.", 19:"2 km recovery pace.",
+ 20:"Skip. Race week."
+};
+var SAT={
+ 1:{t:"Hybrid intervals",x:"5 rounds",n:"400 m run or run/walk, then 60 to 90 sec wall balls at 4 kg."},
+ 2:{t:"Hybrid intervals",x:"5 rounds",n:"400 m run, then 60 to 90 sec sandbag lunges at 10 kg."},
+ 3:{t:"Hybrid intervals",x:"4 rounds",n:"400 m run, then 90 sec burpee broad jump. Measure and record your jump distance."},
+ 4:{t:"Hybrid intervals",x:"4 rounds",n:"400 m run, then 250 m ski or row."},
+ 5:{t:"Hybrid intervals",x:"4 rounds",n:"400 m run, then 12.5 m sled push at whatever load you have."},
+ 6:{t:"Baseline test",x:"60 min",n:"1000 m ski. 1000 m row. Max unbroken wall balls at 4 kg to 9 ft. 80 m burpee broad jump for time. 50 m sled push at race load. Farmers carry 2 x 16 kg for max distance. Longest continuous jog. Record every number."},
+ 7:{t:"Compromised running",x:"2 rounds",n:"1 km run, then one full station at race load. Rotate stations weekly until all eight are covered."},
+ 8:{t:"Compromised running",x:"2 rounds",n:"1 km run, then one full station at race load."},
+ 9:{t:"Compromised running",x:"3 rounds",n:"1 km run, then one full station at race load."},
+ 10:{t:"Compromised running",x:"3 rounds",n:"1 km run, then one full station. Start testing partner splits: 50/50, then uneven."},
+ 11:{t:"Compromised running",x:"3 rounds",n:"1 km run, then one full station at race load."},
+ 12:{t:"Compromised running",x:"3 rounds",n:"1 km run, then one full station at race load."},
+ 13:{t:"Compromised running",x:"3 rounds",n:"1 km run, then one full station. Splits should be locked by the end of today."},
+ 14:{t:"Half simulation",x:"55 to 65 min",n:"Runs 1 to 4 with stations 1 to 4 at race load, continuous, timed."},
+ 15:{t:"Compromised running",x:"2 rounds",n:"1 km run, then a full station at race load."},
+ 16:{t:"Half simulation",x:"55 to 65 min",n:"Runs 5 to 8 with stations 5 to 8 at race load, continuous, timed. Note where your pace falls off."},
+ 17:{t:"Three-quarter simulation",x:"85 to 95 min",n:"Runs 1 to 6 with stations 1 to 6 at race load. Rehearse race day fueling here, not on race morning."},
+ 18:{t:"Station touch",x:"30 min",n:"Short bout at all eight stations at race load."},
+ 19:{t:"Sharpener",x:"35 min",n:"2 rounds: 1 km run, then one station at race load."},
+ 20:{t:"Rest",x:"",n:"Travel day. Walk and stay loose."}
+};
+var LONGWK=[14,16,17];
+var B=[
+ {id:"b1",n:"Greek Yogurt Bowl",k:340,p:27,c:42,f:6,d:"1 cup nonfat Greek yogurt, 3/4 cup mixed berries, 1 tsp honey, 1/4 cup granola.",pr:"No prep. 2 minutes."},
+ {id:"b2",n:"Eggs, Bacon and Guac",k:330,p:30,c:6,f:20,d:"2 whole eggs plus 2 whites scrambled, 2 slices turkey bacon, 2 tbsp guacamole, hot sauce.",pr:"Cook bacon in a batch Sunday and reheat."},
+ {id:"b3",n:"Chicken and Egg Wrap",k:360,p:40,c:14,f:15,d:"3 oz sliced deli chicken, 2 scrambled eggs, sprouts, hot sauce, low carb tortilla.",pr:"5 minutes."},
+ {id:"b4",n:"Berry Protein Smoothie",k:370,p:32,c:26,f:14,d:"1 scoop whey, 1 cup frozen berries, 1 cup unsweetened almond milk, 1 tbsp almond butter, ice.",pr:"Freeze portioned smoothie bags Sunday. Dump and blend."},
+ {id:"b5",n:"Apple and Yogurt",k:320,p:26,c:45,f:4,d:"1 cup Greek yogurt, 1 sliced apple, 1 tsp honey, 2 tbsp granola, cinnamon.",pr:"No prep."},
+ {id:"b6",n:"Savory Scramble",k:380,p:26,c:8,f:28,d:"3 whole eggs, sprouts, 1/4 avocado, 2 slices bacon, hot sauce.",pr:"No prep."}
+];
+var L=[
+ {id:"l1",n:"Turkey Taco Bowl",k:430,p:36,c:32,f:18,d:"4 oz 93/7 ground turkey taco meat, salsa, 1/2 cup cilantro lime rice, 2 tbsp guacamole, 1 oz mozzarella, romaine.",pr:"Batch the taco meat Sunday. 1.5 lb makes 5 to 6 servings."},
+ {id:"l2",n:"Greek Salad, No Tomato",k:420,p:42,c:24,f:17,d:"Romaine, cucumber, red onion, 1/4 cup feta, 1/2 cup chickpeas, 4 oz grilled chicken, tzatziki, lemon and olive oil.",pr:"Built without tomato and olives. Chop veg Sunday."},
+ {id:"l3",n:"Buffalo Chicken Plate",k:390,p:44,c:24,f:13,d:"5 oz shredded chicken in hot sauce, cucumber slices, 3 tbsp hummus, baby carrots.",pr:"Slow cook 2 lb chicken Sunday. Feeds most of the week."},
+ {id:"l4",n:"Chicken Caesar",k:400,p:46,c:10,f:19,d:"Romaine, 5 oz grilled chicken, 2 tbsp light caesar, 2 tbsp shaved parmesan.",pr:"Uses the Sunday chicken batch."},
+ {id:"l5",n:"Deli Roll-Up Box",k:400,p:38,c:14,f:22,d:"4 oz sliced deli turkey, 4 mozzarella balls, 10 pepperoni, baby carrots, 3 tbsp tzatziki.",pr:"Assemble three boxes at once. Zero cooking."},
+ {id:"l6",n:"Sausage and Lentil Soup",k:380,p:28,c:40,f:12,d:"1.5 cups. Chicken sausage, brown lentils, carrot, celery, spinach, chicken broth.",pr:"One pot Sunday, makes 6, freezes well."},
+ {id:"l7",n:"Protein Snack Plate",k:350,p:42,c:20,f:9,d:"4 hard boiled egg whites, 3 oz deli chicken, cucumbers, 3 tbsp hummus, protein sparkling water.",pr:"Boil a dozen eggs Sunday."}
+];
+var D=[
+ {id:"d1",n:"Salmon, Broccoli, Zucchini",k:490,p:38,c:18,f:30,d:"5 oz salmon, roasted broccoli and zucchini, olive oil, lemon, garlic.",pr:"Sheet pan, 400 F, 18 minutes."},
+ {id:"d2",n:"Garlic Shrimp and Green Beans",k:470,p:42,c:45,f:12,d:"6 oz shrimp, sauteed green beans, 2/3 cup jasmine rice, garlic and butter.",pr:"15 minutes. Best weeknight option."},
+ {id:"d3",n:"White Fish and Brussels",k:440,p:40,c:28,f:18,d:"6 oz cod or halibut, roasted brussels sprouts, cooked carrots, olive oil.",pr:"Sheet pan, 425 F, 20 minutes."},
+ {id:"d4",n:"Turkey Chili",k:460,p:38,c:42,f:14,d:"1.5 cups. 93/7 ground turkey, kidney beans, crushed tomato base, peppers, onion, chili spice.",pr:"Crushed base only, no diced pieces. Makes 6, freezes well."},
+ {id:"d5",n:"Sheet Pan Chicken and Veg",k:480,p:48,c:22,f:22,d:"6 oz chicken, broccoli, carrots, zucchini, olive oil, paprika and garlic.",pr:"Double it and night two is leftovers."},
+ {id:"d6",n:"Turkey Taco Skillet",k:450,p:40,c:24,f:22,d:"5 oz ground turkey, peppers, onion, salsa, 1 oz mozzarella, side of green beans.",pr:"Uses the Sunday taco meat."},
+ {id:"d7",n:"Blackened Salmon Caesar",k:500,p:42,c:10,f:32,d:"5 oz blackened salmon over romaine, light caesar, shaved parmesan.",pr:"10 minutes."}
+];
+var S=[
+ {id:"s1",n:"Protein shake",k:150,p:25,c:5,f:2},{id:"s2",n:"Protein bar",k:210,p:20,c:22,f:7},
+ {id:"s3",n:"Cucumbers and hummus",k:140,p:5,c:14,f:7},{id:"s4",n:"Mozzarella balls and pepperoni",k:200,p:14,c:2,f:16},
+ {id:"s5",n:"Chicken bone broth",k:45,p:9,c:1,f:1},{id:"s6",n:"Four hard boiled egg whites",k:70,p:15,c:1,f:0},
+ {id:"s7",n:"Apple and mozzarella balls",k:190,p:10,c:26,f:7},{id:"s8",n:"Greek yogurt and berries",k:160,p:18,c:18,f:1},
+ {id:"s9",n:"Protein sparkling water",k:80,p:20,c:0,f:0},{id:"s10",n:"Carrots and tzatziki",k:130,p:5,c:14,f:6},
+ {id:"s11",n:"Granola and yogurt, larger",k:290,p:22,c:38,f:6},{id:"s12",n:"Protein shake with banana",k:270,p:27,c:32,f:4}
+];
+var MENU=[
+ {b:"b1",l:"l1",d:"d1"},{b:"b2",l:"l3",d:"d2"},{b:"b4",l:"l6",d:"d5"},{b:"b3",l:"l2",d:"d3"},
+ {b:"b1",l:"l5",d:"d4"},{b:"b6",l:"l4",d:"d7"},{b:"b5",l:"l7",d:"d6"},{b:"b4",l:"l1",d:"d3"},
+ {b:"b1",l:"l4",d:"d2"},{b:"b2",l:"l6",d:"d5"},{b:"b5",l:"l3",d:"d1"},{b:"b3",l:"l5",d:"d4"},
+ {b:"b1",l:"l2",d:"d7"},{b:"b6",l:"l7",d:"d6"}
+];
+var PREP=[
+ "Slow cook 2 lb chicken breast, shred, split into hot sauce and plain.",
+ "Brown 1.5 lb 93/7 ground turkey with taco seasoning.",
+ "Boil a dozen eggs.",
+ "Wash and chop cucumbers, carrots, peppers, romaine.",
+ "Roast one large tray of broccoli and one of brussels sprouts.",
+ "Every other week: one pot of sausage lentil soup or turkey chili, portion and freeze.",
+ "Portion 5 smoothie bags into the freezer.",
+ "Cook a tray of turkey bacon."
+];
+var REFS=[
+ {t:"Rate of loss decides whether you build muscle or just lose weight",c:"Garthe et al. 2011, Int J Sport Nutr Exerc Metab 21(2):97-104",
+  p:"Elite athletes were randomized to lose either 0.7% or 1.4% of bodyweight per week, both with four resistance sessions weekly. Both groups lost the same proportion of bodyweight and fat. Only the slower group increased lean mass, by about 2%, and it also gained more squat and bench strength. The faster group finished flat on lean mass despite training identically. This is why your plan targets roughly 0.6% per week rather than the faster number you started with."},
+ {t:"Protein requirements go up in a deficit, not down",c:"Helms et al. 2014, Int J Sport Nutr Exerc Metab 24(2):127-138",
+  p:"A systematic review of resistance-trained lean athletes in energy restriction concluded that protein needs land around 2.3 to 3.1 g per kg of fat-free mass daily, scaling upward as the deficit deepens and as you get leaner. Most people cut protein when they cut calories, which is exactly backwards. Your daily target is calculated from your fat-free mass using this range."},
+ {t:"Higher protein during a deficit can produce lean mass gain, not just retention",c:"Longland et al. 2016, Am J Clin Nutr 103(3):738-746",
+  p:"Over four weeks of substantial energy restriction with resistance and interval training, a higher protein intake produced greater fat loss and actual lean mass gain compared with a lower intake. This is the mechanism behind your expectation of recomposition. It requires the resistance training to be genuinely hard, which is why the strength day is not optional."},
+ {t:"Below 30 kcal per kg of fat-free mass, physiology starts failing",c:"Loucks & Thuma 2003; IOC RED-S consensus, Mountjoy et al.",
+  p:"Energy availability is intake minus the energy cost of exercise, divided by fat-free mass. Roughly 45 kcal/kg FFM/day supports normal function. Below about 30, bone formation markers drop, hormonal signalling is disrupted, and the risk profile for bone stress injury climbs. The app calculates this number for every day of your plan and flags any day that falls below the threshold."},
+ {t:"Bone stress injuries follow workload errors by about three to four weeks",c:"Warden et al. 2021, Curr Osteoporos Rep 19(3):298-307",
+  p:"Bone stress injuries tend to appear roughly three to four weeks after a significant jump in training load, a pattern documented in military recruits moving from sedentary life into basic training. Your situation is structurally similar: no running base, then 19 weeks of progressive impact. This is why the run progression starts with walk intervals rather than continuous running and why it climbs slowly for the first six weeks."},
+ {t:"Energy deficiency is a modifiable risk factor for stress fracture in female runners",c:"Tenforde et al. 2024; Bishop et al. 2021, Annals of Joint",
+  p:"Nutritional deficits, energy deficiency and low bone mineral density are consistently identified among intrinsic risk factors for stress fracture in female runners, alongside rapid increases in training volume. Adequate calcium and vitamin D intake is associated with reduced incidence. Sleep also appears in the risk profile, which is why it is listed as a daily item rather than an afterthought."},
+ {t:"Why three sessions, and what a fourth costs",c:"Applied from the energy availability framework",
+  p:"Energy availability is intake minus exercise cost divided by fat-free mass, so every session you add lowers it unless you also add food. At your composition, rest day availability sits at roughly 30, exactly on the threshold, which means the current three sessions are the most your deficit can support without eating more. A fourth session is available if you feed it, and the app does that automatically. For this race the highest value fourth session is a second easy run, because the 8 km of running is the only part of a doubles race you cannot share with your partner. Yoga and pilates are fine if you enjoy them, but they are not what makes this race go better, and during the deficit they compete for the same energy."},
+ {t:"Why the deficit stops when you reach goal",c:"Applied from the above",
+  p:"Nothing in the literature says you cannot diet and race. What it says is that the adaptations you need in the final six weeks, meaning bone remodeling under peak impact, glycogen loading and recovery between the long simulations, all cost energy. Ending the deficit at week 13 gets you the body composition you want and then gives you six weeks of properly fueled race preparation. Both goals, sequenced instead of stacked."}
+];
+/* ==================== END DATA BLOCK ==================== */
+var RACE=new Date(CFG.raceISO), START=new Date(CFG.startISO+"T00:00:00");
+var byId={}; [].concat(B,L,D,S).forEach(function(m){byId[m.id]=m;});
+var state={}, weights={}, scans=null, live=false, curView="today", openWk=null, focus=null;
+var SYNC={url:CFG.supabaseUrl,key:CFG.supabaseKey};
+function lsGet(){try{var r=localStorage.getItem("raceday-v2");if(r){var o=JSON.parse(r);state=o.s||{};weights=o.w||{};if(o.me)ME=o.me;if(o.sync)SYNC=o.sync;if(o.scans)scans=o.scans;}}catch(e){}
+ if(!scans)scans=SCANS.slice();}
+function lsSet(){try{localStorage.setItem("raceday-v2",JSON.stringify({s:state,w:weights,me:ME,sync:SYNC,scans:scans}));}catch(e){}}
+function cfgd(){return !!(SYNC.url&&SYNC.key);}
+function sbH(){return{apikey:SYNC.key,Authorization:"Bearer "+SYNC.key,"Content-Type":"application/json"};}
+function pull(){if(!cfgd())return Promise.reject();
+ return fetch(SYNC.url+"/rest/v1/checks?select=id,done",{headers:sbH()}).then(function(r){if(!r.ok)throw 0;return r.json();})
+ .then(function(rows){var n={};rows.forEach(function(x){if(x.done)n[x.id]=true;});state=n;lsSet();live=true;});}
+function push(id,on){if(!cfgd())return;fetch(SYNC.url+"/rest/v1/checks",{method:"POST",
+ headers:Object.assign(sbH(),{Prefer:"resolution=merge-duplicates"}),
+ body:JSON.stringify([{id:id,done:on,updated_at:new Date().toISOString()}])}).catch(function(){live=false;});}
+/* ---------- body composition engine ---------- */
+var LB=0.45359237;
+function fatMassLb(){return ME.weightLb*ME.bodyFatPct/100;}
+function ffmLb(){return ME.weightLb-fatMassLb();}
+function ffmKg(){return ffmLb()*LB;}
+/* Katch-McArdle. With a measured fat-free mass this beats Mifflin-St Jeor,
+   which only knows total weight and cannot tell 140 lb of muscle from 140 lb
+   of anything else. On your numbers the two differ by about 100 kcal. */
+function bmr(){return Math.round(370+21.6*ffmKg());}
+/* Goal is a composition, so the target weight moves if you gain lean mass. */
+function targetWeightLb(){return ffmLb()/(1-CFG.goalBodyFatPct/100);}
+function fatToLoseLb(){return Math.max(0,ME.weightLb-targetWeightLb());}
+function neatFactor(){return ME.activity;} // mobile PT work is not desk work, hence 1.45 default
+function maintenanceFor(day){return Math.round(bmr()*neatFactor()+eeeFor(day));}
+function eeeFor(day){
+  if(day.kind==="race")return EEE.race;
+  if(day.kind==="sat")return LONGWK.indexOf(day.w)>-1?EEE.satLong:EEE.sat;
+  if(day.kind==="lift")return EEE.lift;
+  if(day.kind==="run")return EEE.run;
+  if(day.kind==="run2")return EEE.run2;
+  return EEE.rest;
+}
+/* The deficit ends when you reach goal, or at the hard stop, whichever
+   comes first. Hitting 16% in week 8 means eating at maintenance from
+   week 9, not grinding on to week 13 for no reason. */
+function deficitEndsWeek(){return Math.min(CFG.deficitEndWeek,Math.max(1,weeksToGoal()));}
+function inDeficit(day){return day.w<=deficitEndsWeek();}
+/* Your requested timeline sets the deficit. The energy availability floor
+   caps it. Whichever is smaller wins, and the interface says which. */
+function dailyDeficit(){return Math.round(reqDeficit(ME.goalWeeks));}
+/* Hard floor. Intake is never prescribed below the energy availability
+   threshold, whatever the requested rate of loss implies. */
+function eaFloorKcal(day){return Math.round(CFG.eaFloor*ffmKg()+eeeFor(day));}
+/* The largest deficit that still clears the floor. Constant across day
+   types, because maintenance and the floor both scale with session cost. */
+function maxSafeDeficit(){return Math.max(0,Math.round(bmr()*neatFactor()-CFG.eaFloor*ffmKg()));}
+function deficitApplied(){return Math.min(dailyDeficit(),maxSafeDeficit());}
+function kcalFor(day){
+  var m=maintenanceFor(day);
+  var t=inDeficit(day)?Math.max(m-dailyDeficit(),eaFloorKcal(day)):m;
+  return Math.round(t/10)*10;
+}
+function proteinTarget(){ // Helms range, mid-high because the deficit is real
+  return Math.round(ffmKg()*2.6);
+}
+function energyAvail(day){
+  var f=ffmKg(); if(!f)return 0;
+  return Math.round((kcalFor(day)-eeeFor(day))/f);
+}
+function scanFat(s){return s.w*s.bf/100;}
+function scanFFM(s){return s.w-scanFat(s);}
+function sortedScans(){return (scans||[]).slice().sort(function(a,b){return a.d<b.d?-1:1;});}
+function lbPerWk(){return deficitApplied()*7/3500;}
+function ratePct(){return ME.weightLb>0?lbPerWk()/ME.weightLb*100:0;}
+/* What a requested timeline would actually cost, whether or not it is wise. */
+function reqDeficit(wks){return wks>0?fatToLoseLb()*3500/(wks*7):0;}
+function reqEA(wks){var f=ffmKg();if(!f)return 0;
+  return Math.round((bmr()*neatFactor()-reqDeficit(wks))/f*10)/10;}
+function weeksToGoal(){var r=lbPerWk();return r>0?Math.ceil(fatToLoseLb()/r):0;}
+function lbByDeficitEnd(){return lbPerWk()*deficitEndsWeek();}
+/* ---------- day model ---------- */
+function iso(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
+function addD(d,n){var x=new Date(d.getTime());x.setDate(x.getDate()+n);return x;}
+function weekOf(d){return Math.min(20,Math.max(1,Math.floor((d-START)/(7*864e5))+1));}
+function phaseOf(w){for(var i=0;i<PHASES.length;i++)if(w>=PHASES[i].w[0]&&w<=PHASES[i].w[1])return PHASES[i];return PHASES[0];}
+var DAYS=[];
+function buildDays(){
+ DAYS=[];
+ var RD=new Date("2026-12-09T00:00:00");
+ var d=new Date(START),end=new Date("2026-12-09T00:00:00"),i=0;
+ while(d<=end){
+  var w=weekOf(d),ph=phaseOf(w),dow=d.getDay(),kind="rest",title="Rest, walk and mobility";
+  var out=Math.round((RD-d)/864e5);
+  if(out===0){kind="race";title="RACE. Wave 12:40";}
+  else if(out===1){kind="rest";title="Rest. Kit and fuel laid out";}
+  else if(out===2){kind="run";title="Shakeout jog";}
+  else if(out===3){kind="rest";title="Travel to Nashville";}
+  else if(dow===1){kind="lift";title="Strength and grip";}
+  else if(dow===3){kind="run";title="Run";}
+  else if(dow===6){kind="sat";title=SAT[w]?SAT[w].t:"Hybrid";}
+  else if(dow===5&&ME.fourth){kind="run2";title="Second easy run";}
+  DAYS.push({i:i,date:new Date(d.getTime()),iso:iso(d),w:w,ph:ph,dow:dow,kind:kind,title:title});
+  d=addD(d,1);i++;}
+}
+buildDays();
+function mealsFor(day){
+  var m=MENU[day.i%MENU.length], out=[byId[m.b],byId[m.l],byId[m.d]];
+  var base=out.reduce(function(a,x){return a+x.k;},0);
+  var baseP=out.reduce(function(a,x){return a+x.p;},0);
+  var gap=kcalFor(day)-base, pGap=proteinTarget()-baseP;
+  var pool=S.slice();
+  pool.sort(function(a,b){ if(pGap>25)return (b.p/b.k)-(a.p/a.k);
+    return ((a.k*7+day.i*13)%11)-((b.k*7+day.i*13)%11); });
+  var snacks=[];
+  for(var pass=0;pass<2;pass++){
+    for(var n=0;n<pool.length;n++){var s=pool[n];
+      if(snacks.indexOf(s)>-1)continue; if(gap<60)break;
+      if(pass===0&&pGap>15&&s.p<8)continue;
+      if(s.k<=gap+70){snacks.push(s);gap-=s.k;pGap-=s.p;}}}
+  return {meals:out,snacks:snacks};
+}
+function workoutFor(day){
+  var w=day.w,L2=LIFT[w]||LIFT[19],it=[];
+  if(day.kind==="lift"){
+    it.push({n:"Warm Up",x:"5 min",c:"Your call."});
+    it.push({n:"Back Squat",x:L2.sqs+" at "+L2.sq,c:"Brace before you unrack. Rest "+L2.rest+"."});
+    it.push({n:"Romanian Deadlift",x:L2.rds+" at "+L2.rd,c:"Straps on so the hinge gets loaded instead of your grip. Grip is trained separately at the end."});
+    it.push({n:"Reverse Lunge",x:"2 x 10 each side at 20 lb DB",c:"Control the descent, three seconds down."});
+    it.push({n:"Dumbbell Bench Press",x:L2.prs+" at "+L2.pr,c:""});
+    if(w>=7&&w<=17)it.push({n:"Sled Push",x:(w<=13?"6":"3")+" x 12.5 m at race load",c:"102 kg including sled. Low body angle, short choppy steps, do not stand tall."});
+    if(w>=9&&w<=17)it.push({n:"Sled Pull",x:"4 x 12.5 m at race load",c:"78 kg including sled. Hand over hand, stay low, sit back into it."});
+    it.push({n:"Farmers Carry",x:"3 x 40 m, heaviest you can hold",c:"Grip is your deadlift limiter and it appears at two race stations. Most important set of the day."});
+    it.push({n:"Dead Hang",x:"2 sets to near failure",c:"Stop a second or two before the hands actually open."});
+  }else if(day.kind==="run"){
+    it.push({n:"Warm Up",x:"5 min",c:"Your call."});
+    it.push({n:"Run",x:RUN[w]||RUN[19],c:w<=6?"Conversational pace. It should feel embarrassingly slow. You are building tissue tolerance, not fitness.":"A pace you could hold for 8 km."});
+    it.push({n:"Walk Cool Down",x:"5 min",c:""});
+  }else if(day.kind==="sat"){
+    var s=SAT[w];
+    it.push({n:"Warm Up",x:"6 min",c:"Easy jog, then your own prep."});
+    it.push({n:s.t,x:s.x,c:s.n});
+    it.push({n:"Cool Down",x:"5 min",c:"Walk. Compare pacing notes with Justine before you leave."});
+  }else if(day.kind==="race"){
+    it.push({n:"Pre-race fuel",x:"3 hr and 45 min out",c:"Normal breakfast about 3 hours before the wave, then 30 to 60 g carbohydrate about 45 min out. Exactly what you rehearsed in week 17."});
+    it.push({n:"Warm Up",x:"25 min before your wave",c:"Easy jog, your own prep, a few ski pulls. The hall is heated, the walk in is not."});
+    it.push({n:"HYROX Doubles",x:"8 x 1 km plus 8 stations",c:"Run within arm's reach. Split stations as rehearsed. Hold pace on runs 6 through 8. That is the race."});
+  }else if(day.kind==="run2"){
+    it.push({n:"Warm Up",x:"5 min",c:"Your call."});
+    it.push({n:"Second Easy Run",x:RUN2[w]||RUN2[19],c:"Deliberately easier than Wednesday. This is volume, not intensity. If it feels like work, slow down."});
+    it.push({n:"Walk Cool Down",x:"5 min",c:""});
+  }else{
+    it.push({n:"Walk",x:"20 to 30 min",c:"Not a session. Daily movement that supports the deficit without adding meaningful recovery cost."});
+    it.push({n:"Hip and T-Spine Mobility",x:"5 to 8 min",c:"90/90 transitions, half kneeling hip flexor, open book rotations. Enough to keep the sled and lunge positions available. Optional but nearly free in energy terms."});
+    if(day.dow===0)it.push({n:"Food Prep",x:"about 60 min",c:"See the Food tab for this week's prep list."});
+    if(day.dow===0)it.push({n:"Weigh in",x:"once weekly",c:"Same time, same conditions. Log it in the Progress tab. Judge the trend across three weeks, never a single reading."});
+  }
+  it.push({n:"Sleep",x:"7 to 9 hours",c:"Sleep restriction shows up in the bone stress injury risk literature. In a deficit it is not optional recovery, it is part of the prescription."});
+  return it;
+}
+/* ---------- render ---------- */
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function chk(id,label,extra,note){
+  var on=!!state[id];
+  return '<button class="row'+(on?" on":"")+'" data-ck="'+id+'" aria-pressed="'+on+'">'+
+    '<span class="box"><svg viewBox="0 0 20 20"><polyline points="4,10 8,14 16,5"/></svg></span>'+
+    '<span class="rbody"><span class="rt">'+esc(label)+'</span>'+
+    (extra?'<span class="rx">'+esc(extra)+'</span>':'')+(note?'<span class="rn">'+esc(note)+'</span>':'')+'</span></button>';
+}
+function todayD(){var k=iso(new Date());for(var i=0;i<DAYS.length;i++)if(DAYS[i].iso===k)return DAYS[i];
+  return new Date()<START?DAYS[0]:DAYS[DAYS.length-1];}
+function fmt(d){return d.toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"});}
+function setupBanner(){
+  if(ME.set)return "";
+  return '<div class="card flag"><div class="pad"><span class="pill warn">Placeholder numbers</span>'+
+   '<p style="font-size:15px;font-weight:600;margin-top:9px">Every calorie in this app is currently guessed.</p>'+
+   '<p class="hint" style="margin-top:6px">Targets, protein, and the energy availability check are all calculated from your bodyweight, height and body fat. Enter your InBody numbers in Progress and press Save, and this banner goes away permanently. Everything recalculates the moment you do.</p>'+
+   '<button class="pill acc" style="margin-top:11px;padding:8px 14px;font-size:11px" data-goto="prog">Enter your numbers</button></div></div>';
+}
+function viewToday(){
+  var day=focus||todayD(), fd=mealsFor(day), wk=workoutFor(day);
+  var target=kcalFor(day), ea=energyAvail(day), pT=proteinTarget();
+  var eK=0,eP=0,aK=0,aP=0;
+  fd.meals.concat(fd.snacks).forEach(function(m){aK+=m.k;aP+=m.p;
+    if(state["m-"+day.iso+"-"+m.id]){eK+=m.k;eP+=m.p;}});
+  var wDone=0;wk.forEach(function(x,i){if(state["w-"+day.iso+"-"+i])wDone++;});
+  var h=setupBanner();
+  if(day.kind==="race")h+='<div class="card" style="border-color:var(--acc)"><div class="pad"><span class="pill acc">Race day</span>'+
+    '<p style="font-size:19px;font-weight:800;margin-top:9px">Women\'s Doubles, Open. Wave 12:40 to 15:30.</p>'+
+    '<p class="hint" style="margin-top:6px">Music City Center. Both of you run all 8 km together. Everything is already decided. Execute it.</p></div></div>';
+  if(ea>0&&ea<30)h+='<div class="card flag"><div class="pad"><span class="pill warn">Energy availability '+ea+'</span>'+
+    '<p class="hint" style="margin-top:8px">Today lands below 30 kcal per kg of fat-free mass, the threshold where bone formation markers and hormonal signalling start to suffer. Either eat more today or move a session. See the Why tab.</p></div></div>';
+  h+='<div class="card"><div class="chd"><h2>Training</h2><span class="pill'+(day.kind==="rest"?'':' acc')+'">'+esc(day.title)+'</span><span class="r">'+wDone+'/'+wk.length+'</span></div>';
+  wk.forEach(function(x,i){h+=chk("w-"+day.iso+"-"+i,x.n,x.x,x.c);});
+  h+='</div>';
+  h+='<div class="card"><div class="chd"><h2>Nutrition</h2><span class="pill">'+(inDeficit(day)?"Deficit":"Maintenance")+'</span><span class="r">'+eK+' / '+target+'</span></div>'+
+   '<div class="mac"><div><b>'+eK+'</b><i>kcal in</i></div><div><b>'+Math.max(0,target-eK)+'</b><i>left</i></div>'+
+   '<div><b>'+eP+'g</b><i>protein</i></div><div><b>'+(ea>0?ea:"--")+'</b><i>energy avail</i></div></div>'+
+   '<div class="pad" style="padding-bottom:6px"><div class="bar"><i style="width:'+Math.min(100,eK/target*100)+'%"></i></div>'+
+   '<div class="bar g" style="margin-top:6px"><i style="width:'+Math.min(100,eP/pT*100)+'%"></i></div>'+
+   '<p class="hint" style="margin-top:8px">Protein target '+pT+' g. Planned today '+aK+' kcal and '+aP+' g protein.</p></div>';
+  var lbl=["Breakfast","Lunch","Dinner"];
+  fd.meals.forEach(function(m,i){h+=chk("m-"+day.iso+"-"+m.id,lbl[i]+": "+m.n,m.k+" kcal · "+m.p+"g protein",m.d);});
+  fd.snacks.forEach(function(m){h+=chk("m-"+day.iso+"-"+m.id,"Snack: "+m.n,m.k+" kcal · "+m.p+"g protein","");});
+  h+='</div>';
+  if(day.dow===0){h+='<div class="card"><div class="chd"><h2>Sunday prep</h2></div>';
+    PREP.forEach(function(p,i){h+=chk("p-"+day.iso+"-"+i,p,"","");});h+='</div>';}
+  var idx=DAYS.indexOf(day);
+  h+='<div style="display:flex;gap:8px;margin:14px 0 4px">'+
+   '<button class="card" style="flex:1;margin:0;padding:12px;text-align:center;font-size:13px;font-weight:600" data-nav="'+(idx-1)+'"'+(idx<=0?" disabled":"")+'>Previous day</button>'+
+   '<button class="card" style="flex:1;margin:0;padding:12px;text-align:center;font-size:13px;font-weight:600" data-nav="'+(idx+1)+'"'+(idx>=DAYS.length-1?" disabled":"")+'>Next day</button></div>';
+  if(focus&&focus.iso!==todayD().iso)h+='<button class="card" style="width:100%;margin:8px 0 0;padding:12px;text-align:center;font-size:13px;font-weight:600;color:var(--acc)" data-nav="today">Back to today</button>';
+  return h;
+}
+function viewPlan(){
+  var h='<div class="sect"><h2>Every day to race day</h2><span>'+DAYS.length+' days</span></div>';
+  var cur=todayD().w; if(openWk===null)openWk=cur;
+  PHASES.forEach(function(p){
+    h+='<div class="sect"><h2 style="color:var(--acc)">'+p.n+'</h2><span>Weeks '+p.w[0]+(p.w[0]!==p.w[1]?" to "+p.w[1]:"")+'</span></div><p class="hint" style="margin:-4px 0 10px">'+p.note+'</p>';
+    for(var w=p.w[0];w<=p.w[1];w++){
+      var wd=DAYS.filter(function(d){return d.w===w;}); if(!wd.length)continue;
+      var open=(w===openWk);
+      h+='<div class="card"><button class="wkhd" aria-expanded="'+open+'" data-wk="'+w+'">'+
+       '<span class="wkno">WK '+(w<10?"0":"")+w+'</span>'+
+       '<span class="wkdt">'+wd[0].date.toLocaleDateString(undefined,{month:"short",day:"numeric"})+'</span>'+
+       (w===cur?'<span class="pill acc">Now</span>':'')+
+       (w===deficitEndsWeek()?'<span class="pill win">Deficit ends</span>':'')+
+       '<span class="mini">'+wd.map(function(d){var t=d.kind!=="rest";
+         var dn=t&&workoutFor(d).every(function(x,i){return state["w-"+d.iso+"-"+i];});
+         return '<i class="'+(t?"t"+(dn?" done":""):"r")+'"></i>';}).join("")+'</span><span class="chev">&#9656;</span></button>';
+      if(open)wd.forEach(function(d){
+        h+='<button class="dayrow" data-go="'+d.i+'"><span class="dd">'+d.date.toLocaleDateString(undefined,{weekday:"short",day:"numeric"})+'</span>'+
+        '<span class="dl'+(d.kind==="rest"?" rest":"")+'">'+esc(d.title)+'</span><span class="dk">'+kcalFor(d)+'</span></button>';});
+      h+='</div>';
+    }
+  });
+  return h;
+}
+function viewFood(){
+  var t=todayD();
+  var h='<div class="card"><div class="chd"><h2>How your targets are calculated</h2></div><div class="pad">'+
+   '<p class="hint">Nothing here is a fixed number. Your BMR comes from Katch-McArdle using measured fat-free mass, gets multiplied by your activity factor, then that day\'s session cost is added on top. During the deficit a fixed daily amount comes off, sized by the timeline you set and capped by the energy availability floor. That is why a rest day and a long simulation day sit hundreds of calories apart.</p>'+
+   '<p class="hint" style="margin-top:9px"><b>Current daily deficit: '+dailyDeficit()+' kcal.</b> Protein holds at '+proteinTarget()+' g every day, calculated from fat-free mass using the Helms range. The deficit ends at week '+CFG.deficitEndWeek+'.</p></div></div>';
+  h+='<div class="card"><div class="chd"><h2>Targets by phase</h2></div>';
+  PHASES.forEach(function(p){
+    var sample=DAYS.filter(function(d){return d.ph===p;});
+    var r=sample.filter(function(d){return d.kind==="rest";})[0];
+    var tr=sample.filter(function(d){return d.kind!=="rest";})[0];
+    h+='<div class="phrow"><div class="t">'+p.n+'<span>'+(r?kcalFor(r):"-")+' rest · '+(tr?kcalFor(tr):"-")+' session</span></div>'+
+     '<p class="hint" style="margin-top:4px">'+p.note+'</p></div>';
+  });
+  h+='</div>';
+  h+='<div class="sect"><h2>Weekly prep, about an hour on Sunday</h2></div><div class="card">';
+  PREP.forEach(function(p){h+='<div class="fi"><div class="fi-hd"><b>'+p+'</b></div></div>';});
+  h+='</div>';
+  [["Breakfast",B],["Lunch",L],["Dinner",D],["Snacks",S]].forEach(function(g){
+    h+='<div class="sect"><h2>'+g[0]+'</h2><span>'+g[1].length+' options</span></div><div class="card">';
+    g[1].forEach(function(m){h+='<div class="fi"><div class="fi-hd"><b>'+esc(m.n)+'</b><span>'+m.k+' kcal · '+m.p+'P '+m.c+'C '+m.f+'F</span></div>'+
+      (m.d?'<p class="fi-b">'+esc(m.d)+'</p>':'')+(m.pr?'<p class="fi-b" style="color:var(--food)">'+esc(m.pr)+'</p>':'')+'</div>';});
+    h+='</div>';
+  });
+  h+='<div class="card"><div class="pad"><p class="hint"><b>Swaps.</b> Any breakfast trades for any breakfast, same for lunch and dinner, because they sit within about 60 kcal of each other. Nothing contains mushrooms, fresh tomato, or olives. The Greek salad is built without tomato and olives, which is not how one normally comes. The chili uses a crushed tomato base rather than pieces, so pull it if that still reads wrong.</p>'+
+   '<p class="hint" style="margin-top:9px"><b>Calcium and vitamin D.</b> Adequate intake of both is associated with lower stress fracture incidence in active women. Your yogurt, cheese and salmon carry most of it. If you drop dairy at any point, that gap needs filling.</p></div></div>';
+  return h;
+}
+function viewProg(){
+  var t=todayD(), idx=DAYS.indexOf(t);
+  var tr=DAYS.filter(function(d){return d.kind!=="rest"&&d.kind!=="race";});
+  var past=tr.filter(function(d){return d.date<=t.date;});
+  var donePast=past.filter(function(d){return workoutFor(d).every(function(x,i){return state["w-"+d.iso+"-"+i];});});
+  var doneAll=tr.filter(function(d){return workoutFor(d).every(function(x,i){return state["w-"+d.iso+"-"+i];});});
+  var streak=0;
+  for(var i=idx;i>=0;i--){var d=DAYS[i];if(d.kind==="rest")continue;
+    if(workoutFor(d).every(function(x,j){return state["w-"+d.iso+"-"+j];}))streak++;else break;}
+  var h='<div class="card"><div class="chd"><h2>Your numbers</h2>'+(ME.set?'':'<span class="pill warn">Not set</span>')+'</div>'+
+   '<div class="inp"><label>Bodyweight<small>pounds</small></label><input type="number" id="iW" value="'+ME.weightLb+'" step="0.5"></div>'+
+   '<div class="inp"><label>Height<small>inches</small></label><input type="number" id="iH" value="'+ME.heightIn+'" step="0.5"></div>'+
+   '<div class="inp"><label>Body fat<small>percent, an estimate is fine</small></label><input type="number" id="iF" value="'+ME.bodyFatPct+'" step="0.5"></div>'+
+   '<div class="inp"><label>Skeletal muscle mass<small>pounds, from InBody. Tracked, not used in targets.</small></label><input type="number" id="iS" value="'+ME.smmLb+'" step="0.1"></div>'+
+   '<div class="inp"><label>Activity factor<small>1.35 desk work, 1.45 on your feet, 1.55 physical job</small></label><input type="number" id="iA" value="'+ME.activity+'" step="0.05"></div>'+
+   '<div class="inp"><label>Timeline you want<small>weeks to reach '+CFG.goalBodyFatPct+'%</small></label><input type="number" id="iG" value="'+ME.goalWeeks+'" step="1"></div>'+
+   '<div class="pad" style="border-bottom:1px solid var(--line)"><button class="pill acc" style="padding:11px 18px;font-size:11px;width:100%" data-save="1">'+(ME.set?"Numbers saved. Update anytime.":"Save these numbers")+'</button></div>'+
+   '<div class="inp"><label>Fourth session<small>adds a second easy run on Fridays. The app feeds it, so your deficit and timeline do not change.</small></label>'+
+   '<button class="pill '+(ME.fourth?'win':'')+'" style="padding:9px 15px;font-size:11px" data-fourth="1">'+(ME.fourth?'On':'Off')+'</button></div>'+
+   '<div class="pad"><p class="hint">Fat mass '+fatMassLb().toFixed(1)+' lb. Fat-free mass '+ffmLb().toFixed(1)+' lb ('+ffmKg().toFixed(1)+' kg). BMR '+bmr()+' kcal by Katch-McArdle. Estimated rest day maintenance '+maintenanceFor({kind:"rest",w:1})+' kcal. '+
+   'Protein target '+proteinTarget()+' g, which is 2.6 g per kg of fat-free mass.</p>'+
+   '<p class="hint" style="margin-top:9px"><b>Largest deficit that keeps you above the energy availability floor: '+maxSafeDeficit()+' kcal per day.</b> '+
+   (dailyDeficit()>maxSafeDeficit()?'Your '+ME.goalWeeks+' week target needs '+dailyDeficit()+' kcal, which drops you under 30 kcal per kg of fat-free mass. The app has capped it at the floor. ':'Your '+ME.goalWeeks+' week target needs '+dailyDeficit()+' kcal, which clears the floor, so it is applied as asked. ')+
+   'Applied deficit '+deficitApplied()+' kcal per day, or '+lbPerWk().toFixed(2)+' lb per week, which is '+ratePct().toFixed(2)+'% of bodyweight per week.</p>'+
+   (ratePct()>CFG.garthePctCap?'<p class="hint" style="color:var(--warn);margin-top:8px">That rate is above '+CFG.garthePctCap+'% per week. You clear the energy availability floor, but this is the zone where Garthe saw lean mass hold flat rather than climb. You said you expect to gain muscle. At this rate you probably keep what you have instead.</p>':'')+
+   '<p class="hint" style="margin-top:9px"><b>Goal '+CFG.goalBodyFatPct+'% body fat means a target weight of '+targetWeightLb().toFixed(1)+' lb, so '+fatToLoseLb().toFixed(1)+' lb of fat to lose.</b> At '+lbPerWk().toFixed(2)+' lb per week that takes about '+weeksToGoal()+' weeks, finishing in week '+weeksToGoal()+'. The deficit switches itself off after that and you eat at maintenance for the '+(20-deficitEndsWeek())+' weeks into race day.</p>'+
+   '<p class="hint" style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line)"><b>Your requested '+ME.goalWeeks+' week timeline costs:</b> a '+Math.round(reqDeficit(ME.goalWeeks))+' kcal daily deficit, landing you at an energy availability of <b style="color:'+(reqEA(ME.goalWeeks)<30?'var(--warn)':'var(--win)')+'">'+reqEA(ME.goalWeeks)+'</b> kcal per kg fat-free mass. '+
+   (reqEA(ME.goalWeeks)<30?'That is below the 30 threshold. The app has not applied it. Below 30 is where bone formation markers fall and hormonal signalling is disrupted, and you would be holding it while adding running impact from a zero base.':'That clears the threshold and the app has applied it.')+'</p>'+
+   (weeksToGoal()>CFG.deficitEndWeek?'<p class="hint" style="color:var(--warn);margin-top:8px">Slightly short of '+CFG.goalBodyFatPct+'% by week '+CFG.deficitEndWeek+'. Going faster is available but it means eating below the energy availability threshold while adding running impact from zero, which is the specific combination behind stress fracture risk. The remaining pound or two is not worth that trade in a race build.</p>':
+   '<p class="hint" style="color:var(--win);margin-top:8px">That reaches '+CFG.goalBodyFatPct+'% with '+(CFG.deficitEndWeek-weeksToGoal())+' weeks of your window to spare, without ever dropping under the energy availability floor. Once you hit it, come out of the deficit early and eat at maintenance through race day.</p>')+'</div></div>';
+  var sc=sortedScans();
+  h+='<div class="card"><div class="chd"><h2>Body composition history</h2><span class="r">'+sc.length+' scan'+(sc.length===1?'':'s')+'</span></div>'+
+   '<div class="pad"><p class="hint">Press log after each InBody. It snapshots whatever is in the three fields above, so update those first. Weight alone cannot tell you whether you lost fat or lean mass. This can.</p>'+
+   '<button class="pill acc" style="padding:11px 18px;font-size:11px;width:100%;margin-top:11px" data-scan="add">Log today\'s measurement</button></div>';
+  if(sc.length){
+    h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-family:\'IBM Plex Mono\',monospace;font-size:11.5px">'+
+     '<tr><th style="text-align:left;padding:8px 10px;border-top:1px solid var(--line);color:var(--tx3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Date</th>'+
+     '<th style="text-align:right;padding:8px 6px;border-top:1px solid var(--line);color:var(--tx3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Wt</th>'+
+     '<th style="text-align:right;padding:8px 6px;border-top:1px solid var(--line);color:var(--tx3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">BF%</th>'+
+     '<th style="text-align:right;padding:8px 6px;border-top:1px solid var(--line);color:var(--tx3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">Fat</th>'+
+     '<th style="text-align:right;padding:8px 6px;border-top:1px solid var(--line);color:var(--tx3);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase">SMM</th>'+
+     '<th style="border-top:1px solid var(--line)"></th></tr>';
+    sc.forEach(function(s,ix){
+      var pv=ix>0?sc[ix-1]:null;
+      var df=pv?scanFat(s)-scanFat(pv):null, ds=pv?s.smm-pv.smm:null;
+      var col=function(v,good){return v===null?'':'<span style="color:'+(v===0?'var(--tx3)':(good?'var(--win)':'var(--warn)'))+'"> '+(v>0?'+':'')+v.toFixed(1)+'</span>';};
+      h+='<tr><td style="padding:9px 10px;border-top:1px solid var(--line)">'+s.d.slice(5)+'</td>'+
+       '<td style="text-align:right;padding:9px 6px;border-top:1px solid var(--line)">'+s.w.toFixed(1)+'</td>'+
+       '<td style="text-align:right;padding:9px 6px;border-top:1px solid var(--line)">'+s.bf.toFixed(1)+'</td>'+
+       '<td style="text-align:right;padding:9px 6px;border-top:1px solid var(--line)">'+scanFat(s).toFixed(1)+col(df,df!==null&&df<0)+'</td>'+
+       '<td style="text-align:right;padding:9px 6px;border-top:1px solid var(--line)">'+s.smm.toFixed(1)+col(ds,ds!==null&&ds>0)+'</td>'+
+       '<td style="text-align:right;padding:9px 10px;border-top:1px solid var(--line)"><button data-scan="del:'+s.d+'" style="color:var(--tx3);font-size:14px;line-height:1" aria-label="Remove this scan">&#215;</button></td></tr>';
+    });
+    h+='</table></div>';
+    if(sc.length>1){
+      var a=sc[0],b=sc[sc.length-1];
+      var fatCh=scanFat(b)-scanFat(a), smmCh=b.smm-a.smm;
+      h+='<div class="pad" style="border-top:1px solid var(--line)"><p class="hint">'+
+       'Across '+sc.length+' scans, fat mass '+(fatCh<0?'down':'up')+' '+Math.abs(fatCh).toFixed(1)+' lb and skeletal muscle '+(smmCh<0?'down':'up')+' '+Math.abs(smmCh).toFixed(1)+' lb. '+
+       (fatCh<0&&smmCh>=0?'<b style="color:var(--win)">That is a recomposition. Fat down, muscle held or gained.</b>':
+        fatCh<0&&smmCh<0?'<b style="color:var(--warn)">Fat is coming off but so is muscle. Check protein is actually hitting target and that the strength day is not the one you skip.</b>':
+        '<b>Fat mass is not moving yet. If this holds past three weeks, the activity factor is likely set too high.</b>')+'</p></div>';
+    }
+    h+='<div class="pad" style="border-top:1px solid var(--line)"><p class="hint">Logged here, this history lives in this browser only and does not travel with sync. Export it by hand if you switch devices.</p></div>';
+  }
+  h+='</div>';
+  h+='<div class="card"><div class="stat">'+
+   '<div><b>'+Math.max(0,Math.ceil((RACE-new Date())/864e5))+'</b><i>days out</i></div>'+
+   '<div><b>'+streak+'</b><i>session streak</i></div>'+
+   '<div><b>'+(past.length?Math.round(donePast.length/past.length*100):0)+'%</b><i>sessions hit</i></div></div></div>';
+  h+='<div class="card"><div class="chd"><h2>Weekly weigh in</h2><span class="r">Sundays</span></div><div class="pad">'+
+   '<p class="hint">Log one weight per week, same time and conditions. Read the three week trend, never a single number. Daily fluctuation from fluid and glycogen is larger than a week of real fat loss.</p></div>';
+  for(var w=1;w<=Math.min(20,t.w+1);w++){
+    h+='<div class="inp"><label>Week '+w+'<small>'+DAYS.filter(function(d){return d.w===w;})[0].date.toLocaleDateString(undefined,{month:"short",day:"numeric"})+'</small></label>'+
+     '<input type="number" step="0.1" data-wt="'+w+'" value="'+(weights[w]||"")+'" placeholder="lb"></div>';
+  }
+  var logged=Object.keys(weights).map(Number).sort(function(a,b){return a-b;});
+  if(logged.length>1){
+    var first=weights[logged[0]], last=weights[logged[logged.length-1]], ch=last-first;
+    h+='<div class="pad" style="border-top:1px solid var(--line)"><p class="hint"><b>'+(ch<0?"Down":"Up")+' '+Math.abs(ch).toFixed(1)+' lb</b> across '+(logged[logged.length-1]-logged[0])+' weeks, averaging '+
+     (Math.abs(ch)/(logged[logged.length-1]-logged[0])).toFixed(2)+' lb per week against a predicted '+lbPerWk().toFixed(2)+'. '+
+     (Math.abs(ch)/(logged[logged.length-1]-logged[0])>lbPerWk()*1.15?'You are losing faster than the model predicts, which means your activity factor is higher than entered. Raise it so your targets rise with it.':
+      Math.abs(ch)/(logged[logged.length-1]-logged[0])<lbPerWk()*0.85?'You are losing slower than predicted. Your activity factor is likely lower than entered.':'Tracking as predicted. The activity factor you entered looks right.')+'</p></div>';
+  }
+  h+='</div>';
+  h+='<div class="card"><div class="chd"><h2>Training completion</h2><span class="r">'+doneAll.length+' / '+tr.length+'</span></div>'+
+   '<div class="pad"><div class="bar"><i style="width:'+(doneAll.length/tr.length*100)+'%"></i></div>'+
+   '<p class="hint" style="margin-top:9px">'+donePast.length+' of '+past.length+' sessions completed so far. That ratio predicts your race, not the total.</p></div></div>';
+  h+='<div class="card"><div class="chd"><h2>By phase</h2></div>';
+  PHASES.forEach(function(p){
+    var pd=tr.filter(function(d){return d.w>=p.w[0]&&d.w<=p.w[1];});
+    var pn=pd.filter(function(d){return workoutFor(d).every(function(x,i){return state["w-"+d.iso+"-"+i];});});
+    h+='<div class="phrow"><div class="t">'+p.n+'<span>'+pn.length+' / '+pd.length+'</span></div><div class="bar"><i style="width:'+(pd.length?pn.length/pd.length*100:0)+'%"></i></div></div>';
+  });
+  h+='</div>';
+  var lowEA=DAYS.filter(function(d){var e=energyAvail(d);return e>0&&e<30;});
+  h+='<div class="card'+(lowEA.length?" flag":"")+'"><div class="chd"><h2>Energy availability audit</h2><span class="r">'+lowEA.length+' flagged</span></div><div class="pad">'+
+   (lowEA.length?'<p class="hint"><b>'+lowEA.length+' of '+DAYS.length+' days fall below 30 kcal per kg of fat-free mass.</b> That is the threshold associated with disrupted bone formation and hormonal signalling. Raise your intake on those days or lower the deficit. First flagged day is '+lowEA[0].date.toLocaleDateString()+'.</p>':
+   '<p class="hint">No day in the plan falls below the 30 kcal/kg fat-free mass threshold. Lowest day sits at '+Math.min.apply(null,DAYS.map(energyAvail))+'.</p>')+'</div></div>';
+  h+='<div class="card"><div class="chd"><h2>Sync across devices</h2>'+
+   '<span class="pill '+(cfgd()?(live?"win":"warn"):"")+'">'+(cfgd()?(live?"Connected":"Not reaching")+"":"Solo mode")+'</span></div>'+
+   '<div class="pad"><p class="hint">'+
+   (cfgd()?(live?"Connected. Your checks follow you between phone and laptop. <b>Anything ticked here is readable by anyone with this site URL, including your food log.</b>":
+   "Keys are saved but the database is not responding. Check the URL and key below. Nothing is lost, everything is still saving to this browser."):
+   "Right now everything saves to this browser only. Tick a box on your phone and your laptop will not see it.")+'</p>'+
+   '<p class="hint" style="margin-top:9px">To turn sync on: create a free project at supabase.com, run the table SQL from the README, then paste your Project URL and anon public key below. No file editing, it saves here.</p></div>'+
+   '<div class="inp"><label>Supabase URL<small>https://yourproject.supabase.co</small></label></div>'+
+   '<div class="pad" style="padding-top:0"><input type="text" id="sbU" value="'+esc(SYNC.url)+'" placeholder="https://....supabase.co" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:7px;background:var(--bg);font-family:\'IBM Plex Mono\',monospace;font-size:13px"></div>'+
+   '<div class="inp"><label>Anon public key<small>safe in a browser, it is designed to be</small></label></div>'+
+   '<div class="pad" style="padding-top:0"><input type="text" id="sbK" value="'+esc(SYNC.key)+'" placeholder="eyJhbGci..." style="width:100%;padding:10px;border:1px solid var(--line);border-radius:7px;background:var(--bg);font-family:\'IBM Plex Mono\',monospace;font-size:13px"></div>'+
+   '<div class="pad" style="display:flex;gap:8px"><button class="pill acc" style="padding:11px 18px;font-size:11px;flex:1" data-sync="save">Connect</button>'+
+   (cfgd()?'<button class="pill" style="padding:11px 18px;font-size:11px;border:1px solid var(--line)" data-sync="clear">Disconnect</button>':'')+'</div></div>';
+  return h;
+}
+function viewWhy(){
+  var h='<div class="card"><div class="pad"><p class="hint">Every prescription in this app traces to something below. Where the evidence and your original instinct disagreed, the evidence won and the reasoning is stated.</p></div></div>';
+  h+='<div class="card">';
+  REFS.forEach(function(r){h+='<div class="ref"><b>'+esc(r.t)+'</b><cite>'+esc(r.c)+'</cite><p>'+esc(r.p)+'</p></div>';});
+  h+='</div>';
+  h+='<div class="card"><div class="pad"><p class="hint"><b>Limits worth knowing.</b> The energy availability thresholds come largely from short laboratory studies in women, and how cleanly they transfer to free-living athletes is still argued. Body fat percentage from anything other than DEXA carries meaningful error, which propagates into every number here. Estimated maintenance is a formula, not a measurement, so the weigh-in trend is what actually validates the target. If you are losing faster than planned, the estimate was low and you should eat more.</p></div></div>';
+  return h;
+}
+function render(){
+  var t=todayD(), day=focus||t;
+  document.getElementById("cdN").textContent=Math.max(0,Math.ceil((RACE-new Date())/864e5));
+  document.getElementById("hPhase").textContent=day.ph.n+" · Week "+day.w;
+  document.getElementById("hDate").textContent=fmt(day.date);
+  document.getElementById("view").innerHTML=
+   curView==="today"?viewToday():curView==="plan"?viewPlan():curView==="food"?viewFood():curView==="prog"?viewProg():viewWhy();
+}
+function syncTabs(){[].forEach.call(document.querySelectorAll(".tab"),function(t){t.setAttribute("aria-selected",t.dataset.v===curView);});}
+document.addEventListener("click",function(e){
+  var c=e.target.closest("[data-ck]");
+  if(c){var id=c.dataset.ck,on=!state[id];if(on)state[id]=true;else delete state[id];lsSet();push(id,on);render();return;}
+  var w=e.target.closest("[data-wk]"); if(w){var n=+w.dataset.wk;openWk=(openWk===n?-1:n);render();return;}
+  var g=e.target.closest("[data-go]"); if(g){focus=DAYS[+g.dataset.go];curView="today";syncTabs();render();scrollTo(0,0);return;}
+  var nv=e.target.closest("[data-nav]"); if(nv){var v=nv.dataset.nav;focus=(v==="today")?null:DAYS[+v];render();scrollTo(0,0);return;}
+  var gt=e.target.closest("[data-goto]"); if(gt){curView=gt.dataset.goto;syncTabs();render();scrollTo(0,0);return;}
+  var sc2=e.target.closest("[data-scan]");
+  if(sc2){var v=sc2.dataset.scan;
+    if(v==="add"){var t=iso(new Date());
+      scans=(scans||[]).filter(function(x){return x.d!==t;});
+      scans.push({d:t,w:ME.weightLb,bf:ME.bodyFatPct,smm:ME.smmLb});}
+    else if(v.indexOf("del:")===0){var dd=v.slice(4);scans=(scans||[]).filter(function(x){return x.d!==dd;});}
+    lsSet();render();return;}
+  var sy=e.target.closest("[data-sync]");
+  if(sy){
+    if(sy.dataset.sync==="clear"){SYNC={url:"",key:""};live=false;lsSet();render();return;}
+    var u=(document.getElementById("sbU").value||"").trim().replace(/\/$/,"");
+    var kk=(document.getElementById("sbK").value||"").trim();
+    SYNC={url:u,key:kk}; lsSet();
+    if(cfgd())pull().then(function(){live=true;render();}).catch(function(){live=false;render();});
+    else render();
+    return;
+  }
+  var sv=e.target.closest("[data-save]");
+  if(sv){var q=function(id){return parseFloat(document.getElementById(id).value);};
+    var a=q("iW"),b=q("iH"),c2=q("iF"),d2=q("iA"),e2=q("iG"),f2=q("iS");
+    if(a>0)ME.weightLb=a; if(b>0)ME.heightIn=b; if(c2>0&&c2<60)ME.bodyFatPct=c2;
+    if(f2>0)ME.smmLb=f2; if(d2>=1.2&&d2<=1.9)ME.activity=d2; if(e2>0&&e2<=40)ME.goalWeeks=e2;
+    ME.set=true; lsSet(); render(); return;}
+  var f4=e.target.closest("[data-fourth]");
+  if(f4){ME.fourth=!ME.fourth;buildDays();lsSet();render();return;}
+  var tb=e.target.closest(".tab"); if(tb){curView=tb.dataset.v;syncTabs();render();scrollTo(0,0);return;}
+  if(e.target.closest("#themeBtn")){
+    var cu=document.documentElement.getAttribute("data-theme");
+    var nx=cu==="dark"?"light":cu==="light"?"":"dark";
+    if(nx)document.documentElement.setAttribute("data-theme",nx);else document.documentElement.removeAttribute("data-theme");
+    try{localStorage.setItem("raceday-theme",nx);}catch(err){}
+  }
+});
+document.addEventListener("change",function(e){
+  var t=e.target;
+  if(t.id==="iW"||t.id==="iH"||t.id==="iF"||t.id==="iA"||t.id==="iG"||t.id==="iS"){
+    var g=function(id){return parseFloat(document.getElementById(id).value);};
+    var vw=g("iW"),vh=g("iH"),vf=g("iF"),va=g("iA"),vg=g("iG"),vs=g("iS");
+    if(vw>0)ME.weightLb=vw; if(vh>0)ME.heightIn=vh; if(vf>0&&vf<60)ME.bodyFatPct=vf;
+    if(vs>0)ME.smmLb=vs; if(va>=1.2&&va<=1.9)ME.activity=va; if(vg>0&&vg<=40)ME.goalWeeks=vg;
+    ME.set=true; lsSet(); render(); return;
+  }
+  if(t.dataset.wt){var v=parseFloat(t.value); if(v>0)weights[t.dataset.wt]=v; else delete weights[t.dataset.wt]; lsSet(); render();}
+});
+lsGet();
+try{var th=localStorage.getItem("raceday-theme");if(th)document.documentElement.setAttribute("data-theme",th);}catch(e){}
+if(cfgd())pull().then(function(){render();setInterval(function(){pull().then(render).catch(function(){});},15000);}).catch(render);
+else render();
+setInterval(function(){document.getElementById("cdN").textContent=Math.max(0,Math.ceil((RACE-new Date())/864e5));},36e5);
+</script>
+</body>
+</html>
